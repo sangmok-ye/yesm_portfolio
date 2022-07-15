@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <style>
+    *{padding: 0;margin: 0; font-size: 14px; box-sizing: border-box;}
+    ul,li{list-style: none;}
+    input{border: none; border-bottom: 1px solid #ccc; appearance: none; outline: none; width: 40px; background: transparent; font-size: 16px; text-align: right;}
+    .flex_box{display: flex;}
+
+    #wrap{width: 100%;max-width: 500px; margin: 50px auto; border: 1px solid #ccc; border-radius: 10px; overflow: hidden; }
+    .top{background: #f9f9f9; padding: 10px 20px; text-align: center; font-size: 16px;}
+    .top input{width: 150px;text-align: center;}
+    .prev_box{position: absolute; top: 50%; right: 70%; transform: translateY(-50%);}
+    .next_box{position: absolute; top: 50%; left: 70%; transform: translateY(-50%);}
+    em{display: block;width: 20px;height: 20px;background: url(
+    https://cdn-icons.flaticon.com/png/512/2722/premium/2722985.png?token=exp=1657789625~hmac=adf0f51d67d268d5d25dbcc66a8d78f7) no-repeat center / cover;}
+    .prev{transform: rotate(180deg);}
+    .d_prev{background-image: url(https://cdn-icons.flaticon.com/png/512/2722/premium/2722998.png?token=exp=1657789640~hmac=0cb6a003063b4e85e11d7c2189cb82bd);transform: rotate(180deg);}
+    .d_next{background-image: url(https://cdn-icons.flaticon.com/png/512/2722/premium/2722998.png?token=exp=1657789640~hmac=0cb6a003063b4e85e11d7c2189cb82bd);}
+    .middle{padding: 10px 0px;}
+    .middle ul,
+    .bottom ul{display: flex; justify-content: space-between;padding: 5px 20px; }
+    .middle ul li strong{color: red; font-size: 16px;}
+
+    .bottom{height: 300px; overflow: auto; }
+    .bottom::-webkit-scrollbar{display: none; width: 0;height: 0;;}
+    .bottom ul:hover{background: #eee; cursor: default;}
+    .bottom ul li input{border: none; cursor: default;}
+  </style>
+</head>
+<body>
+  <div id="wrap">
+    <section class="top flex_box">
+      <span>디바이스 기준 너비(px 기준)</span>
+      <div style="position: relative">
+        <input type="text" value="500" id="inp" oninput="oper()">
+        <div class="prev_box flex_box">
+          <em class="d_prev"></em>
+          <em class="prev"></em>
+        </div>
+        <div class="next_box  flex_box">
+          <em class="next"></em>
+          <em class="d_next"></em>
+        </div>
+      </div>
+    </section>
+    <section class="middle">
+      <ul>
+        <li class="to_px">
+          <input type="text" value="3.2" id="inp" oninput="oper()">
+          <span>vw → </span><strong></strong>px
+        </li>
+        <li class="to_vw">
+          <input type="text" value="12"id="inp" oninput="oper()">
+          <span>px → </span><strong></strong>vw
+        </li>
+      </ul>
+    </section>
+    <section class="bottom">
+    </section>
+  </div>
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+  for(let i=2; i<25; i++){
+  $(".bottom").append(`
+  <ul>
+    <li class="to_px">
+      <input type="text" value="`+i+`" id="inp" readonly>
+      <span>vw → </span><strong></strong>px
+    </li>
+    <li class="to_vw">
+      <input type="text" value="`+i+`" id="inp" readonly>
+      <span>px → </span><strong></strong>vw
+    </li>
+  </ul>`)
+      }
+
+  function operation(){
+      let val = $(".top input").val()
+    $(".to_px strong").each(function(){
+      let oper_px = $(this).parents("li.to_px").find("input").val() * val / 100
+      $(this).text(Math.round(oper_px))
+    })
+    $(".to_vw strong").each(function(){
+      let val = $(".top input").val()
+      let oper_vw = $(this).parents("li.to_vw").find("input").val() / val * 100
+      $(this).text(oper_vw.toFixed(1))
+    })
+    }
+  operation()
+  function oper(){
+    let timer;
+    $("input").keydown(function(){
+      if(timer) {
+          clearTimeout(timer);
+      }
+      timer = setTimeout(function() {
+        operation()
+      }, 500);
+    });
+  }
+
+</script>
+</html>
